@@ -34,36 +34,41 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'ProductsComponent',
+  computed: {
+    ...mapState(['cart']),
+  },
   data() {
     return {
       products: [],
-      cart: [], // Array para armazenar os produtos no carrinho
     };
   },
   mounted() {
     this.requestProductsAPI();
   },
   methods: {
+    ...mapMutations(['addToCart', 'removeFromCart']),
     async requestProductsAPI() {
       try {
         const response = await fetch(`https://api.escuelajs.co/api/v1/products`);
         const data = await response.json();
-        return this.products = data.filter(product => [15, 16, 17, 19, 23, 24, 25, 26].includes(product.id));
+        this.products = data.filter(product => [15, 16, 17, 19, 23, 24, 25, 26].includes(product.id));
       } catch (error) {
         console.error('Ocorreu um erro: ', error);
       }
     },
     isProductInCart(productId) {
-      return this.cart.includes(productId);
+      return this.cart.some(item => item === productId);
     },
     toggleCart(product) {
       const productId = product.id;
       if (this.isProductInCart(productId)) {
-        this.cart = this.cart.filter(id => id !== productId);
+        this.removeFromCart(productId);
       } else {
-        this.cart.push(productId);
+        this.addToCart(productId);
       }
     },
   },
@@ -72,10 +77,10 @@ export default {
 
 <style scoped>
 .lista-produtos {
-justify-content: space-between;
+  justify-content: space-between;
 }
 
 img {
-height: revert-layer;
+  height: revert-layer;
 }
 </style>
