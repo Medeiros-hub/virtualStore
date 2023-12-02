@@ -48,7 +48,9 @@
 export default {
   name: 'HeaderComponent',
   computed: {
-
+    cartItemCount() {
+      return this.$store.state.cart.length;
+    },
   },
   methods: {
     showCart() {

@@ -52,6 +52,7 @@ export default {
   methods: {
     ...mapMutations(['addToCart', 'removeFromCart']),
     async requestProductsAPI() {
+      alert("Por favor adicionar 1 item de cada vez ao carrinho")
       try {
         const response = await fetch(`https://api.escuelajs.co/api/v1/products`);
         const data = await response.json();
@@ -69,6 +70,7 @@ export default {
         this.removeFromCart(productId);
       } else {
         this.addToCart(productId);
+        this.$store.commit('setProducts', [product]); 
       }
     },
   },
